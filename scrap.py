@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 """
-    Program to get all gre words and their meaning form http://www.gredics.com.
+    Program to get all gre words and their meaning from http://www.gredics.com.
 
     Program Flow
     ------------
@@ -105,22 +105,27 @@ def fetch_word_meaning():
                  if meaning['id'] == 'taisha' or meaning['id'] == 'barron':
                      print meaning.contents[0]
                      
-            an instrument for performing calculations by sliding counters along rods or in grooves 
+            an instrument for performing calculations by sliding counters along 
+            rods or in grooves 
         """
         meanings = content.findAll('li')
         print_to_file = word + ": " 
         for meaning in meanings:
-            if meaning['id'] == 'taisha' or meaning['id'] == 'barron':
-                for m in meaning.contents:
-                    m = unicode(m)
-                    if not m.startswith('<'):
-                        print m
-                        print_to_file += m
-                        print_to_file += "\n"
-            print(print_to_file,)
-            with open(file_name, "a") as f:
-                f.writelines(print_to_file)
-            print("is written to file")
+            try:
+                if meaning.has_key('id') and meaning['id'] == 'taisha' or \
+                                                  meaning['id'] == 'barron':
+                    for m in meaning.contents:
+                        m = unicode(m)
+                        if not m.startswith('<'):
+                            print m
+                            print_to_file += m
+                            print_to_file += "\n"
+                print(print_to_file,)
+                with open(file_name, "a") as f:
+                    f.writelines(print_to_file)
+                print("is written to file")
 
+            except Exception:
+                print "oh exception"
 if __name__ == "__main__":
     fetch_word_meaning()
